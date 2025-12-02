@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const studentSchema = new mongoose.Schema({
-  // 1. Add adminId to track who created this student
+  
   adminId: {
     type: String,
     required: true, 
@@ -19,8 +19,7 @@ const studentSchema = new mongoose.Schema({
   studentId: {
     type: String,
     required: true,
-    // REMOVED "unique: true" from here. 
-    // We will enforce uniqueness using the index below.
+
   },
   pincode: { type: String, default: '' },
   district: { type: String, default: '' },
@@ -29,8 +28,7 @@ const studentSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// 2. Create a Compound Unique Index
-// This ensures that 'studentId' is unique ONLY within the same 'adminId'
+
 studentSchema.index({ studentId: 1, adminId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Student', studentSchema);

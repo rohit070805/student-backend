@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // This reads the string from your .env file
+    
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB Connected Successfully');
   } catch (error) {

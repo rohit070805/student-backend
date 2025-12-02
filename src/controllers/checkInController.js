@@ -1,28 +1,26 @@
 const CheckIn = require('../models/CheckIn');
 const Student = require('../models/student');
 
-// @desc    Check In a Student (Specific to the Teacher)
+
 const addCheckIn = async (req, res) => {
   try {
-    // 1. Get studentId AND adminId from the request
+ 
     const { studentId, adminId } = req.body;
 
     if (!adminId) {
       return res.status(400).json({ message: 'Admin ID is required' });
     }
 
-    // 2. Find the student belonging to THIS admin
-    // This ensures Teacher A cannot check in Teacher B's student
     const student = await Student.findOne({ 
       studentId: { $regex: new RegExp(`^${studentId}$`, 'i') },
-      adminId: adminId // CRITICAL: Filter by Admin ID
+      adminId: adminId 
     });
 
     if (!student) {
       return res.status(404).json({ message: 'Student ID not found in your class list.' });
     }
 
-    // 3. Create the Check-In Record linked to this admin
+    
     const newCheckIn = await CheckIn.create({
       adminId: adminId, // Save the link
       studentId: student.studentId,
@@ -35,10 +33,10 @@ const addCheckIn = async (req, res) => {
   }
 };
 
-// @desc    Get All Check-ins for a specific teacher
+
 const getCheckIns = async (req, res) => {
   try {
-    // 1. Get adminId from query params
+    
     const { adminId } = req.query;
 
     if (!adminId) {
